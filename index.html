@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>SERVICE BY iEelXyz</title>
+
+<style>
+    body {
+        background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDqZUmIYDd3_Bhn-fA_Dl9FjST3b1in5WILTdWQKck3va5cBUHbeAwHjY8&s=10');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+    .dark { filter: brightness(0.7) contrast(1.15); }
+
+    button {
+        padding: 10px 25px;
+        margin: 10px;
+        background-color: #d4d6d5;
+        color: black;
+        border-radius: 4px;
+        border: 1px solid #fdef0c;
+        cursor: pointer;
+    }
+
+    .hidden { display: none; }
+
+    input, textarea {
+        width: 85%;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 5px;
+        border: none;
+    }
+
+    .blink {
+        font-size: 20px;
+        animation: blink 3s infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% { color: #fff; text-shadow: 0 0 20px #fff; }
+        50% { color: #ddd; text-shadow: 0 0 10px #ccc; }
+    }
+
+    .vipSensor {
+        position: relative;
+        overflow: hidden;
+        cursor: not-allowed !important;
+        opacity: 1;
+    }
+
+    .loader {
+        border: 5px solid #ddd;
+        border-top: 5px solid yellow;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        animation: spin 1s linear infinite;
+        margin: 15px auto;
+        display: none;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .checkmark {
+        font-size: 45px;
+        color: lightgreen;
+        display: none;
+        margin-top: 15px;
+    }
+
+    #darkToggle {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        background: rgba(0,0,0,0.4);
+        color: white;
+        border: 1px solid yellow;
+    }
+</style>
+</head>
+
+<body>
+
+<button id="darkToggle" onclick="toggleDark()">🌙 Dark</button>
+
+<div id="menuPage">
+    <br><br><br>
+
+    <em class="blink">🔥 SERVICE WHATSAPP TERBAIK 🔥</em>
+
+    <br><br>
+    <h3>👾 BETA PROJECT 👾</h3>
+
+    <button onclick="openInput('KENON (BANNED)')"><h4>METHODS BANNED 👽</h4></button>
+    <button onclick="openInput('UNKENON (UNBANNED)')"><h4>METHODS UNBANNED 🥶</h4></button>
+    <button onclick="openInput('RESET-OTP')"><h4>METHODS RESET OTP ☠️</h4></button>
+
+    <br><br>
+    <h3>⚠️ JANGAN DISALAH GUNAKAN ⚠️</h3>
+</div>
+
+<div id="inputPage" class="hidden">
+
+    <br><br>
+    <h2 id="methodTitle">Method Selected : </h2>
+
+    <input id="input1" placeholder="Masukkan No HP Target">
+
+    <div id="methodSelectArea">
+
+        <h3>Select Power Method : </h3>
+
+        <button class="vipSensor" disabled>
+            🔴 BRUTAL KEDIP (🌟 VIP)
+        </button>
+
+        <button onclick="selectStrength('Medium')" id="mediumBtn">
+            🟡 MEDIUM METHOD (🔥 FREE)
+        </button>
+
+        <button onclick="selectStrength('Slow')" id="slowBtn">
+            🟢 SLOW METHOD (🔥 FREE)
+        </button>
+
+        <p id="strengthStatus" style="margin-top:5px; text-shadow:0 0 5px black;"></p>
+    </div>
+
+    <textarea id="pesan" placeholder="Pesan tambahan buat owner (opsional)"></textarea>
+
+    <button id="kirimBtn" onclick="kirim()">AUTO SEND</button>
+    <button onclick="backToMenu()">BACK</button>
+
+    <p id="status" style="margin-top:20px; font-size:17px; font-weight:bold;"></p>
+
+    <div class="loader" id="loadingSpinner"></div>
+
+    <div id="checkIcon" class="checkmark">✔</div>
+
+</div>
+
+<script>
+    let currentMethod = "";
+    let strength = "";
+    let cooldown = false;
+
+    function openInput(method) {
+        currentMethod = method;
+        document.getElementById("methodTitle").innerText = "METHOD : " + method;
+
+        document.getElementById("menuPage").classList.add("hidden");
+        document.getElementById("inputPage").classList.remove("hidden");
+
+        strength = "";
+        document.getElementById("strengthStatus").innerText = "";
+
+        document.getElementById("checkIcon").style.display = "none";
+        document.getElementById("loadingSpinner").style.display = "none";
+
+        if (method === "resetotp") {
+            document.getElementById("methodSelectArea").classList.add("hidden");
+        } else {
+            document.getElementById("methodSelectArea").classList.remove("hidden");
+        }
+    }
+
+    function selectStrength(type) {
+        strength = type;
+        document.getElementById("strengthStatus").innerText = "Selected : " + type;
+    }
+
+    function backToMenu() {
+        document.getElementById("inputPage").classList.add("hidden");
+        document.getElementById("menuPage").classList.remove("hidden");
+
+        document.getElementById("status").innerText = "";
+        document.getElementById("input1").value = "";
+        document.getElementById("pesan").value = "";
+        cooldown = false;
+    }
+
+    async function kirim() {
+        const i1 = document.getElementById("input1").value.trim();
+        const pesan = document.getElementById("pesan").value.trim();
+        const status = document.getElementById("status");
+        const loader = document.getElementById("loadingSpinner");
+        const checkIcon = document.getElementById("checkIcon");
+        const btn = document.getElementById("kirimBtn");
+
+        if (!i1) {
+            status.style.color = "yellow";
+            status.innerText = "❗ Data No HP Target Wajib Diisi!";
+            return;
+        }
+
+        if (currentMethod !== "resetotp" && !strength) {
+            status.style.color = "yellow";
+            status.innerText = "❗ Pilih method ( Medium / Slow )!";
+            return;
+        }
+
+        if (cooldown) {
+            status.style.color = "yellow";
+            status.innerText = "⏳ Tunggu cooldown selesai...";
+            return;
+        }
+
+        loader.style.display = "block";
+        checkIcon.style.display = "none";
+
+        btn.disabled = true;
+        cooldown = true;
+
+        status.style.color = "white";
+        status.innerText = "🔧 Mempersiapkan Method...";
+        await new Promise(r => setTimeout(r, 2000));
+
+        status.innerText = "⚙️ Mengcompile Hasil...";
+        await new Promise(r => setTimeout(r, 2000));
+
+        status.innerText = "📡 Mengirim...";
+        await new Promise(r => setTimeout(r, 2000));
+
+        const data = {
+            method: currentMethod,
+            input1: i1,
+            input2: strength || "-",
+            pesan: pesan
+        };
+
+        const res = await fetch("/api/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const out = await res.json();
+
+        loader.style.display = "none";
+
+        if (out.success) {
+            checkIcon.style.display = "block";
+            status.style.color = "lightgreen";
+            status.innerText = "✔ Terkirim!";
+        } else {
+            checkIcon.style.display = "none";
+            status.style.color = "red";
+            status.innerText = "❌ Gagal mengirim!";
+            btn.disabled = false;
+            cooldown = false;
+            return;
+        }
+
+        // ================================
+        // REALTIME COOLDOWN 5 DETIK
+        // ================================
+        let cd = 5;
+        status.style.color = "yellow";
+        status.innerText = `⏳ Cooldown ${cd} detik...`;
+
+        let cdInterval = setInterval(() => {
+            cd--;
+            status.innerText = `⏳ Cooldown ${cd} detik...`;
+
+            if (cd <= 0) {
+                clearInterval(cdInterval);
+                cooldown = false;
+                btn.disabled = false;
+                status.innerText = "";
+                checkIcon.style.display = "none";
+            }
+        }, 1000);
+    }
+
+    function toggleDark() {
+        document.body.classList.toggle("dark");
+    }
+</script>
+
+</body>
+</html>
